@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 import { Connectdb } from './config/db.js';
 
 import cors from 'cors';
-import routes from './routes/user-routes.js';
+import Userroutes from './routes/user-routes.js';
+import Productroutes from './routes/product-routes.js';
 dotenv.config()
 const app = express();
 
@@ -18,7 +19,8 @@ app.use(express.json())
 app.get("/", (req , res ) => {
     res.send("server is ready")
 })
-app.use("/api/user/", routes)
+app.use("/api/user/", Userroutes)
+app.use("/api/product/",Productroutes )
 
 app.listen(5000, ()=> {
     Connectdb()

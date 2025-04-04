@@ -7,6 +7,7 @@ import Product from "./pages/Product-page";
 import Login from "./pages/Login-page";
 import Not from "./pages/Not-Found";
 import SignUpPage from "./pages/Signup-Page";
+import InventoryPage from "./pages/InventoryPage";
 function App() {
   return (
    <Router>
@@ -18,6 +19,7 @@ function App() {
       <Route path="/" element={<Home/>} />
       <Route path="/Billing" element={<Billing/>} />
       <Route path="/Product" element={<Product/>} />
+      <Route path="/Inventory" element={<InventoryPage/>} />
       <Route path="/Login" element={<Login/>} />
       <Route path="/sign-up" element={<SignUpPage/>} />
       <Route path="*" element={<Not/>} />

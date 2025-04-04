@@ -2,11 +2,11 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { createUser , login } from '../controllers/userControllers.js';
 
-const routes = express.Router()
+const Userroutes = express.Router()
 
-routes.post("/createuser" , createUser)
+Userroutes.post("/createuser" , createUser)
 
-routes.post("/login",login)
+Userroutes.post("/login",login)
 
 
-export default routes;
+export default Userroutes;

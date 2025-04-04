@@ -44,11 +44,6 @@ function NavBar() {
             <Flex h={16} alignItems="center" justifyContent="space-between" maxW="7xl" mx="auto">
                 {/* Logo */}
                 <Link to="/" className="flex items-center">
-                    <img
-                        src="https://flowbite.com/docs/images/logo.svg"
-                        alt="Logo"
-                        className="h-8 w-auto mr-2"
-                    />
                     <span className={`text-xl font-bold ${textColor}`}>Hisham Agencies</span>
                 </Link>
 
@@ -58,6 +53,9 @@ function NavBar() {
                         <Link to="/" className={`hover:text-blue-600 text-md ${textColor}`}>Home</Link>
                         {isLoggedIn && custom_claim === "admin"  &&  (
                             <Link to="/billing" className={`hover:text-blue-600 text-md ${textColor}`}>Billing</Link>
+                        )}
+                        {isLoggedIn && custom_claim === "admin"  &&  (
+                            <Link to="/inventory" className={`hover:text-blue-600 text-md ${textColor}`}>Inventory</Link>
                         )}
                         <Link to="/product" className={`hover:text-blue-600 text-md ${textColor}`}>Product</Link>
 
