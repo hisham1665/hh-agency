@@ -51,6 +51,7 @@ const AddProductForm = () => {
         status: 'success',
         duration: 3000,
         isClosable: true,
+        position:'top-right',
       });
 
       setFormData({
@@ -65,6 +66,7 @@ const AddProductForm = () => {
         status: 'error',
         duration: 3000,
         isClosable: true,
+        position:'top-right',
       });
     }
 

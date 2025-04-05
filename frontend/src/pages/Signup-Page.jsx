@@ -17,7 +17,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 const SignUpPage = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const formBg = useColorModeValue("white", "gray.700");

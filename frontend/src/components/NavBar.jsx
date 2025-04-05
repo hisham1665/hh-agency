@@ -12,29 +12,22 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, SunIcon, MoonIcon } from '@chakra-ui/icons';
 import {jwtDecode} from "jwt-decode";
+import { useAuth } from '../context/AuthContext';
 
 
-function NavBar() {
-
+function NavBar({key}) {
+    const {logoutUser} = useAuth();
+    const {user , setUser} = useAuth()
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { colorMode, toggleColorMode } = useColorMode();
-
+    const custom_claim = user
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        setCustom_claim("user")
+        logoutUser()
         navigate('/Login');
+        window.location.reload()
     };
-    const isLoggedIn = !!localStorage.getItem('token');
-    const [custom_claim , setCustom_claim] = useState("user")
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if(token) {
-            const decodedUser = jwtDecode(token);
-            setCustom_claim( decodedUser.role);
-        }
-    }, []);
-
+    const isLoggedIn = !!user
     // Colors based on theme mode
     const bgColor = useColorModeValue('white', 'gray.800');
     const textColor = useColorModeValue('gray.700', 'gray.200');
@@ -51,10 +44,10 @@ function NavBar() {
                 <Flex alignItems="center" display={{ base: 'none', md: 'flex' }}>
                     <Stack direction="row" spacing={4} align="center">
                         <Link to="/" className={`hover:text-blue-600 text-md ${textColor}`}>Home</Link>
-                        {isLoggedIn && custom_claim === "admin"  &&  (
+                        {isLoggedIn && user === "admin"  &&  (
                             <Link to="/billing" className={`hover:text-blue-600 text-md ${textColor}`}>Billing</Link>
                         )}
-                        {isLoggedIn && custom_claim === "admin"  &&  (
+                        {isLoggedIn && user === "admin"  &&  (
                             <Link to="/inventory" className={`hover:text-blue-600 text-md ${textColor}`}>Inventory</Link>
                         )}
                         <Link to="/product" className={`hover:text-blue-600 text-md ${textColor}`}>Product</Link>

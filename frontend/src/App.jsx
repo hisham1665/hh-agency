@@ -8,6 +8,8 @@ import Login from "./pages/Login-page";
 import Not from "./pages/Not-Found";
 import SignUpPage from "./pages/Signup-Page";
 import InventoryPage from "./pages/InventoryPage";
+import ProtectedRoute from "./components/ProtectedRoutes";
+
 function App() {
   return (
    <Router>
@@ -15,14 +17,14 @@ function App() {
     <div className="mt-16">
 
     <Routes  > 
-      
       <Route path="/" element={<Home/>} />
-      <Route path="/Billing" element={<Billing/>} />
       <Route path="/Product" element={<Product/>} />
-      <Route path="/Inventory" element={<InventoryPage/>} />
       <Route path="/Login" element={<Login/>} />
       <Route path="/sign-up" element={<SignUpPage/>} />
       <Route path="*" element={<Not/>} />
+      <Route path="/not-found" element={<Not/>} />
+      <Route path="/Inventory" element={<ProtectedRoute allowedRoles={["admin"]} > <InventoryPage/> </ProtectedRoute>} />
+      <Route path="/billing" element={<ProtectedRoute allowedRoles={["admin"]} > <Billing /> </ProtectedRoute>} />
     </Routes>
     </div>
    </Router>

@@ -10,18 +10,21 @@ import {
   IconButton,
   useColorMode,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const MotionBox = motion(Box);
+import { useAuth } from "../context/AuthContext";
+const MotionBox = motion.create(Box);
 
 const LoginPage = () => {
+  const { loginUser } = useAuth();
   const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
   const formBg = useColorModeValue("white", "gray.700");
-
+  const toast = useToast()
   // 👇 State variables for email, password, and password visibility
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,11 +41,20 @@ const LoginPage = () => {
       const res = await axios.post('http://localhost:5000/api/user/login', loginData);
 
       // Save token in localStorage (optional)
-        localStorage.setItem('token', res.data.token);
-        console.log('User:', res.data.user);
+        loginUser(res.data.token);
         navigate('/');
+        window.location.reload()
+
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login error:', error.response.data.message);
+      toast({
+        title: 'Error',
+        description: error.response.data.message,
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        position:"top-right"
+      })
       // Check if error.response exists
     }
   };
