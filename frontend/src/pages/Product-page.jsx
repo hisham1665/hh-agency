@@ -1,19 +1,11 @@
 import React from 'react'
 import Cards_product from '../components/ProductPageWIdgets/Cards'
-
+import { SimpleGrid, Box } from '@chakra-ui/react'
 function Product() {
   return (
-    <div className='grid grid-cols-3'>
+    <Box p={4}>
         <Cards_product />
-        <Cards_product />
-        <Cards_product />
-        <Cards_product />
-        <Cards_product />
-        <Cards_product />
-        <Cards_product />
-        <Cards_product />
-        <Cards_product />
-    </div>
+    </Box>
   )
 }
 

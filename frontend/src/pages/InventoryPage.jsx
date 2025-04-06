@@ -9,6 +9,7 @@ import {
 import AddProductForm from '../components/InventoryPageWidgets/AddProduct';
 import SearchWithSuggestions from '../components/InventoryPageWidgets/SearchWithSugggestion';
 import axios from 'axios';
+import PopupForm from '../components/InventoryPageWidgets/AddCatagory';
 
 const Inventory_list = lazy(() =>
   import('../components/InventoryPageWidgets/Product_list')
@@ -18,7 +19,6 @@ function InventoryPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-
   const flexDirection = useBreakpointValue({
     base: 'column',
     md: 'row',
@@ -26,20 +26,21 @@ function InventoryPage() {
 
   const isMobile = useBreakpointValue({ base: true, md: false });
 
+  const fetchProducts = async () => {
+    try {
+      const url = searchQuery
+        ? `http://localhost:5000/api/product/get-products?q=${searchQuery}`
+        : 'http://localhost:5000/api/product/get-products';
+      const res = await axios.get(url);
+      setProducts(res.data);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const url = searchQuery
-          ? `http://localhost:5000/api/product/get-products?q=${searchQuery}`
-          : 'http://localhost:5000/api/product/get-products';
-        const res = await axios.get(url);
-        setProducts(res.data);
-      } catch (err) {
-        console.error("Failed to fetch products:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchProducts();
   }, [searchQuery]);
 
@@ -52,18 +53,20 @@ function InventoryPage() {
         <Box mb={4}>
           <SearchWithSuggestions setSearchQuery={setSearchQuery} />
         </Box>
-
         {/* Show AddProductForm below search and above list on mobile */}
         {isMobile && (
           <Box mb={4}>
             <AddProductForm />
+            <Box mt={4}>
+              <PopupForm /> {/* Button will now be placed inside a Box with margin */}
+            </Box>
           </Box>
         )}
 
         <Box>
           <Stack spacing={4}>
             <Suspense fallback={<Spinner size="lg" color="blue.500" />}>
-              <Inventory_list products={products} />
+              <Inventory_list products={products} refreshProducts={fetchProducts}  />
             </Suspense>
           </Stack>
         </Box>
@@ -73,6 +76,9 @@ function InventoryPage() {
       {!isMobile && (
         <Box flex={{ base: '1', md: '0.6' }} minW="300px">
           <AddProductForm />
+          <Box mt={4}>
+            <PopupForm /> {/* Button will now be placed inside a Box with margin */}
+          </Box>
         </Box>
       )}
     </Flex>

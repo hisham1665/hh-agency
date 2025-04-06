@@ -6,11 +6,12 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
   VStack,
   Heading,
   useToast,
 } from '@chakra-ui/react';
+import CategoryAutocomplete from './CatagoryAutoComplete';
+
 
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ const AddProductForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -38,6 +39,7 @@ const AddProductForm = () => {
         status: 'warning',
         duration: 3000,
         isClosable: true,
+        position: 'top-right',
       });
       return;
     }
@@ -51,7 +53,7 @@ const AddProductForm = () => {
         status: 'success',
         duration: 3000,
         isClosable: true,
-        position:'top-right',
+        position: 'top-right',
       });
 
       setFormData({
@@ -66,15 +68,16 @@ const AddProductForm = () => {
         status: 'error',
         duration: 3000,
         isClosable: true,
-        position:'top-right',
+        position: 'top-right',
       });
     }
-
   };
-
+  
   return (
-    <Box maxW="lg" mx="auto" mt={10} p={6} borderWidth={1} borderRadius="xl" boxShadow="lg">
-      <Heading mb={6} textAlign="center">Add New Product</Heading>
+    <Box maxW="lg" mx="auto" mt={10} p={6} borderWidth={1} borderRadius="xl" boxShadow="lg" position="relative">
+      <Heading mb={6} textAlign="center">
+        Add New Product
+      </Heading>
       <form onSubmit={handleSubmit}>
         <VStack spacing={4}>
           <FormControl isRequired>
@@ -98,20 +101,12 @@ const AddProductForm = () => {
             />
           </FormControl>
 
-          <FormControl>
-            <FormLabel>Category</FormLabel>
-            <Select
-              name="Product_Catogory"
-              placeholder="Select category"
-              value={formData.Product_Catogory}
-              onChange={handleChange}
-            >
-              <option value="furniture">Furniture</option>
-              <option value="electronics">Electronics</option>
-              <option value="fashion">Fashion</option>
-              <option value="vegetables">Vegetables</option>
-            </Select>
-          </FormControl>
+          <CategoryAutocomplete 
+             value={formData.Product_Catogory}
+             onChange={(value) =>
+               setFormData((prev) => ({ ...prev, Product_Catogory: value }))
+             }
+          />
 
           <Button type="submit" colorScheme="blue" width="full">
             Add Product

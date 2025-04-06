@@ -6,6 +6,7 @@ import { Connectdb } from './config/db.js';
 import cors from 'cors';
 import Userroutes from './routes/user-routes.js';
 import Productroutes from './routes/product-routes.js';
+import Catagoryroutes from './routes/catagory-routes.js';
 dotenv.config()
 const app = express();
 
@@ -21,6 +22,7 @@ app.get("/", (req , res ) => {
 })
 app.use("/api/user/", Userroutes)
 app.use("/api/product/",Productroutes )
+app.use("/api/catagory/",Catagoryroutes )
 
 app.listen(5000, ()=> {
     Connectdb()

@@ -90,8 +90,11 @@ function NavBar({key}) {
                     <Stack as="nav" spacing={4}>
                         <Link to="/" onClick={onClose} className={`hover:text-blue-600 text-md ${textColor}`}>Home</Link>
                         <Link to="/product" onClick={onClose} className={`hover:text-blue-600 text-md ${textColor}`}>Product</Link>
-                        {isLoggedIn && custom_claim === "admin"  &&  (
+                        {isLoggedIn && user === "admin"  &&  (
                             <Link to="/billing" className={`hover:text-blue-600 text-md ${textColor}`}>Billing</Link>
+                        )}
+                        {isLoggedIn && user === "admin"  &&  (
+                            <Link to="/inventory" className={`hover:text-blue-600 text-md ${textColor}`}>Inventory</Link>
                         )}
 
                         {!isLoggedIn ? (
