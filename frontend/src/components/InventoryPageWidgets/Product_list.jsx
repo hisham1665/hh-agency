@@ -1,13 +1,10 @@
-import React, { useEffect, useState , useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Box, Text, Stack, Heading, IconButton,
   useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton,
-  ModalBody, ModalFooter, Button, Input, useToast, FormControl, FormLabel, Flex , AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
+  ModalBody, ModalFooter, Button, Input, useToast, FormControl, FormLabel, Flex, AlertDialog,
+  AlertDialogOverlay, AlertDialogContent, AlertDialogHeader,
+  AlertDialogBody, AlertDialogFooter, HStack
 } from '@chakra-ui/react';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import axios from 'axios';
@@ -20,24 +17,39 @@ function Product_list({ products, refreshProducts }) {
     onOpen: onOpenEdit,
     onClose: onCloseEdit
   } = useDisclosure();
-  
+
   const {
     isOpen: isOpenDelete,
     onOpen: onOpenDelete,
     onClose: onCloseDelete
   } = useDisclosure();
-  
+
   const toast = useToast();
   const cancelRef = useRef();
+
   const [editForm, setEditForm] = useState({
     Product_name: '',
     Product_price: '',
+    Wholesale_price: '',
     Product_Catogory: '',
   });
+
+  // 🔢 PAGINATION STATE
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 5; // Customize this value as needed
+
+  // 🧮 Get paginated data
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  const nextPage = () => currentPage < totalPages && setCurrentPage(prev => prev + 1);
+  const prevPage = () => currentPage > 1 && setCurrentPage(prev => prev - 1);
+
   const confirmDelete = async () => {
     try {
-      console.log("Selected product to delete:", selectedProductId);
-
       await axios.delete(`http://localhost:5000/api/product/delete-product/${selectedProductId}`);
       toast({
         title: 'Product deleted.',
@@ -46,7 +58,7 @@ function Product_list({ products, refreshProducts }) {
         isClosable: true,
         position: 'top-right',
       });
-      refreshProducts(); // ✅ This properly refreshes the product list; // Refresh the product list
+      refreshProducts();
     } catch (error) {
       toast({
         title: 'Error deleting product',
@@ -65,6 +77,7 @@ function Product_list({ products, refreshProducts }) {
     setSelectedProductId(id);
     onOpenDelete();
   };
+
   const handleEditClick = (product) => {
     setSelectedProduct(product);
     setEditForm(product);
@@ -87,7 +100,7 @@ function Product_list({ products, refreshProducts }) {
         position: 'top-right',
       });
       onCloseEdit();
-      refreshProducts(); // to re-fetch updated products
+      refreshProducts();
     } catch (error) {
       toast({
         title: 'Update failed',
@@ -104,7 +117,7 @@ function Product_list({ products, refreshProducts }) {
     <Box>
       <Heading size="lg" mb={4}>Products Inventory</Heading>
       <Stack spacing={3}>
-        {products.length > 0 ? products.map(product => (
+        {currentProducts.length > 0 ? currentProducts.map(product => (
           <Box
             key={product._id}
             p={4}
@@ -115,27 +128,19 @@ function Product_list({ products, refreshProducts }) {
             position="relative"
           >
             <Flex direction="column" position="absolute" top={2} right={2} gap={2}>
-              <IconButton
-                icon={<EditIcon />}
-                aria-label="Edit product"
-                colorScheme="yellow"
-                size="sm"
-                onClick={() => handleEditClick(product)}
-              />
-              <IconButton
-                icon={<DeleteIcon />}
-                aria-label="Delete product"
-                colorScheme="red"
-                size="sm"
-                onClick={() => handleDeleteClick(product._id)}
-              />
+              <IconButton icon={<EditIcon />} aria-label="Edit" colorScheme="yellow" size="sm" onClick={() => handleEditClick(product)} />
+              <IconButton icon={<DeleteIcon />} aria-label="Delete" colorScheme="red" size="sm" onClick={() => handleDeleteClick(product._id)} />
             </Flex>
-
             <Text fontSize="2xl" fontWeight="bold">{product.Product_name}</Text>
             <Text fontSize="lg">Category: {product.Product_Catogory}</Text>
-            <Text fontSize="xl" fontWeight="bold" fontFamily="monospace">
-              Price: ₹{product.Product_price}
-            </Text>
+            <Flex justify="space-around">
+              <Text fontSize="xl" fontWeight="bold" fontFamily="monospace">
+                Purchasing Price: ₹{product.Wholesale_price}
+              </Text>
+              <Text fontSize="xl" fontWeight="bold" fontFamily="monospace">
+                Retailing Price: ₹{product.Product_price}
+              </Text>
+            </Flex>
           </Box>
         )) : (
           <Text textAlign="center" fontSize="lg" color="gray.500">
@@ -144,7 +149,26 @@ function Product_list({ products, refreshProducts }) {
         )}
       </Stack>
 
-      {/* EDIT MODAL */}
+      {/* PAGINATION CONTROLS */}
+      {products.length > productsPerPage && (
+        <HStack spacing={2} mt={6} justify="center">
+          <Button onClick={prevPage} isDisabled={currentPage === 1}>
+            Previous
+          </Button>
+          {[...Array(totalPages)].map((_, i) => (
+            <Button
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              colorScheme={currentPage === i + 1 ? 'blue' : 'gray'}
+            >
+              {i + 1}
+            </Button>
+          ))}
+          <Button onClick={nextPage} isDisabled={currentPage === totalPages}>
+            Next
+          </Button>
+        </HStack>
+      )}
       <Modal isOpen={isOpenEdit} onClose={onCloseEdit}>
         <ModalOverlay />
         <ModalContent>
@@ -160,7 +184,16 @@ function Product_list({ products, refreshProducts }) {
               />
             </FormControl>
             <FormControl mb={3}>
-              <FormLabel>Price</FormLabel>
+              <FormLabel>Purchasing Price</FormLabel>
+              <Input
+                type="number"
+                name="Wholesale_price"
+                value={editForm.Wholesale_price}
+                onChange={handleEditChange}
+              />
+            </FormControl>
+            <FormControl mb={3}>
+              <FormLabel>Retailing Price</FormLabel>
               <Input
                 type="number"
                 name="Product_price"

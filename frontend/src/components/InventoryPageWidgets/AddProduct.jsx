@@ -17,6 +17,7 @@ const AddProductForm = () => {
   const [formData, setFormData] = useState({
     Product_name: '',
     Product_price: '',
+    Wholesale_price: '',
     Product_Catogory: '',
   });
 
@@ -33,7 +34,7 @@ const AddProductForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.Product_name || !formData.Product_price || !formData.Product_Catogory) {
+    if (!formData.Product_name || !formData.Product_price || !formData.Wholesale_price || !formData.Product_Catogory) {
       toast({
         title: 'Please fill out all fields',
         status: 'warning',
@@ -91,7 +92,17 @@ const AddProductForm = () => {
           </FormControl>
 
           <FormControl isRequired>
-            <FormLabel>Price</FormLabel>
+            <FormLabel>Purchasing price</FormLabel>
+            <Input
+              type="number"
+              name="Wholesale_price"
+              placeholder="Enter price"
+              value={formData.Wholesale_price}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Retailing Price</FormLabel>
             <Input
               type="number"
               name="Product_price"
