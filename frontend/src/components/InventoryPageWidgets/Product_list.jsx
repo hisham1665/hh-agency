@@ -112,6 +112,37 @@ function Product_list({ products, refreshProducts }) {
       });
     }
   };
+  const getPaginationRange = () => {
+    const totalNumbers = 5; // max pages to show
+    const totalBlocks = totalNumbers + 2;
+
+    if (totalPages <= totalBlocks) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    const leftSiblingIndex = Math.max(currentPage - 1, 2);
+    const rightSiblingIndex = Math.min(currentPage + 1, totalPages - 1);
+    const shouldShowLeftDots = leftSiblingIndex > 2;
+    const shouldShowRightDots = rightSiblingIndex < totalPages - 1;
+
+    const range = [1];
+
+    if (shouldShowLeftDots) {
+      range.push('...');
+    }
+
+    for (let i = leftSiblingIndex; i <= rightSiblingIndex; i++) {
+      range.push(i);
+    }
+
+    if (shouldShowRightDots) {
+      range.push('...');
+    }
+
+    range.push(totalPages);
+
+    return range;
+  };
 
   return (
     <Box>
@@ -151,23 +182,34 @@ function Product_list({ products, refreshProducts }) {
 
       {/* PAGINATION CONTROLS */}
       {products.length > productsPerPage && (
-        <HStack spacing={2} mt={6} justify="center">
-          <Button onClick={prevPage} isDisabled={currentPage === 1}>
-            Previous
+        <HStack justify="center" mt={6} spacing={1} wrap="wrap">
+          <Button size="sm" onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} isDisabled={currentPage === 1}>
+            Prev
           </Button>
-          {[...Array(totalPages)].map((_, i) => (
-            <Button
-              key={i}
-              onClick={() => handlePageChange(i + 1)}
-              colorScheme={currentPage === i + 1 ? 'blue' : 'gray'}
-            >
-              {i + 1}
-            </Button>
-          ))}
-          <Button onClick={nextPage} isDisabled={currentPage === totalPages}>
+
+          {getPaginationRange().map((page, idx) =>
+            page === '...' ? (
+              <Box key={idx} px={2}>
+                ...
+              </Box>
+            ) : (
+              <Button
+                key={idx}
+                size="sm"
+                variant={currentPage === page ? 'solid' : 'outline'}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </Button>
+            )
+          )}
+
+          <Button size="sm" onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} isDisabled={currentPage === totalPages}>
             Next
           </Button>
         </HStack>
+
+
       )}
       <Modal isOpen={isOpenEdit} onClose={onCloseEdit}>
         <ModalOverlay />

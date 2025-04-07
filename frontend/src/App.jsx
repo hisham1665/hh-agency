@@ -9,6 +9,7 @@ import Not from "./pages/Not-Found";
 import SignUpPage from "./pages/Signup-Page";
 import InventoryPage from "./pages/InventoryPage";
 import ProtectedRoute from "./components/ProtectedRoutes";
+import CategoryProductsPage from "./pages/CatagoryProductPage";
 
 function App() {
   return (
@@ -24,8 +25,12 @@ function App() {
       <Route path="*" element={<Not/>} />
       <Route path="/not-found" element={<Not/>} />
       <Route path="/Inventory" element={<ProtectedRoute allowedRoles={["admin"]} > <InventoryPage/> </ProtectedRoute>} />
+      <Route path="/category/:categoryName" element={<CategoryProductsPage/>} />
       <Route path="/billing" element={<ProtectedRoute allowedRoles={["admin"]} > <Billing /> </ProtectedRoute>} />
     </Routes>
+    </div>
+    <div className="mt-10 p-5 bg-slate-800">
+      <span className="text-white ">devoloper : Hisham</span>
     </div>
    </Router>
   )

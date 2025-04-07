@@ -106,4 +106,13 @@ export const updateProduct = async (req, res) => {
       res.status(500).json({ message: "Server error", error: err });
     }
   };
-  
+
+export const getProductsByCatagory = async (req, res) => {
+    try {
+      const categoryName = req.params.categoryName;
+      const products = await Product.find({ Product_Catogory: categoryName });
+      res.json(products);
+    } catch (err) {
+      res.status(500).json({ message: 'Server Error' });
+    }
+  }

@@ -1,3 +1,5 @@
+// AddProductForm.js
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
@@ -11,7 +13,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import CategoryAutocomplete from './CatagoryAutoComplete';
-
 
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
@@ -57,9 +58,11 @@ const AddProductForm = () => {
         position: 'top-right',
       });
 
+      // ✅ Reset form fully including Wholesale_price
       setFormData({
         Product_name: '',
         Product_price: '',
+        Wholesale_price: '',
         Product_Catogory: '',
       });
     } catch (error) {
@@ -73,9 +76,9 @@ const AddProductForm = () => {
       });
     }
   };
-  
+
   return (
-    <Box maxW="lg" mx="auto" mt={10} p={6} borderWidth={1} borderRadius="xl" boxShadow="lg" position="relative">
+    <Box maxW="lg" mx="auto" mt={10} p={6} borderWidth={1} borderRadius="xl" boxShadow="lg">
       <Heading mb={6} textAlign="center">
         Add New Product
       </Heading>
@@ -101,6 +104,7 @@ const AddProductForm = () => {
               onChange={handleChange}
             />
           </FormControl>
+
           <FormControl isRequired>
             <FormLabel>Retailing Price</FormLabel>
             <Input
@@ -112,11 +116,11 @@ const AddProductForm = () => {
             />
           </FormControl>
 
-          <CategoryAutocomplete 
-             value={formData.Product_Catogory}
-             onChange={(value) =>
-               setFormData((prev) => ({ ...prev, Product_Catogory: value }))
-             }
+          <CategoryAutocomplete
+            value={formData.Product_Catogory}
+            onChange={(value) =>
+              setFormData((prev) => ({ ...prev, Product_Catogory: value }))
+            }
           />
 
           <Button type="submit" colorScheme="blue" width="full">

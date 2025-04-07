@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   SimpleGrid,
-  Spinner,
-  Center,
   Card,
   CardHeader,
   CardBody,
@@ -14,55 +12,71 @@ import {
   VStack,
   Stack,
   Button,
+  Flex,
+  HStack,
 } from '@chakra-ui/react';
-import axios from 'axios';
 
-function Cards_product() {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+function Cards_product({ product = [], getCategoryImage }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 20;
 
-  useEffect(() => {
-    const fetchProductsAndCategories = async () => {
-      try {
-        const [productRes, categoryRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/product/get-products'),
-          axios.get('http://localhost:5000/api/catagory/get-catagory'),
-        ]);
+  const totalPages = Math.ceil(product.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedProducts = product.sort(() => 0.5 - Math.random()).slice(startIndex, endIndex);
 
-        setProducts(productRes.data);
-        setCategories(categoryRes.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchProductsAndCategories();
-  }, []);
-
-  const getCategoryImage = (productCategory) => {
-    const category = categories.find(cat => cat.Catagory_name === productCategory);
-    return category?.Catagory_Image || 'https://via.placeholder.com/260x280.png?text=No+Image';
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
   };
 
-  if (loading) {
+  const handlePrev = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNext = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
+  if (!product || product.length === 0) {
     return (
-      <Center minH="60vh">
-        <Spinner size="xl" />
-      </Center>
+      <Text textAlign="center" fontSize="lg" color="gray.500">
+        No products found.
+      </Text>
     );
   }
+  const getVisiblePageNumbers = (currentPage, totalPages, maxVisiblePages = 5) => {
+    if (totalPages <= maxVisiblePages) {
+      return [...Array(totalPages)].map((_, i) => i + 1);
+    }
+
+    const pages = [];
+    const sidePages = Math.floor(maxVisiblePages / 2);
+
+    let startPage = Math.max(1, currentPage - sidePages);
+    let endPage = Math.min(totalPages, currentPage + sidePages);
+
+    if (startPage === 1) {
+      endPage = maxVisiblePages;
+    } else if (endPage === totalPages) {
+      startPage = totalPages - maxVisiblePages + 1;
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
 
   return (
     <Box p={5} width="100%">
       <SimpleGrid
-        columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }} spacing={6}
+        columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+        spacing={6}
         width="100%"
         justifyItems="center"
       >
-        {products.map((product) => (
+        {paginatedProducts.map((product) => (
           <Card
             key={product._id}
             width={'100%'}
@@ -113,6 +127,41 @@ function Cards_product() {
           </Card>
         ))}
       </SimpleGrid>
+
+      {/* Numbered Pagination */}
+      {/* Numbered Pagination */}
+      <Flex justify="center" mt={8}>
+        <HStack spacing={2} wrap="wrap">
+          <Button
+            onClick={handlePrev}
+            isDisabled={currentPage === 1}
+            size="sm"
+            variant="ghost"
+          >
+            Previous
+          </Button>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <Button
+              key={i + 1}
+              onClick={() => handlePageClick(i + 1)}
+              size="sm"
+              variant={currentPage === i + 1 ? 'solid' : 'ghost'}
+              colorScheme={currentPage === i + 1 ? 'blue' : 'gray'}
+            >
+              {i + 1}
+            </Button>
+          ))}
+          <Button
+            onClick={handleNext}
+            isDisabled={currentPage === totalPages}
+            size="sm"
+            variant="ghost"
+          >
+            Next
+          </Button>
+        </HStack>
+      </Flex>
+
     </Box>
   );
 }
