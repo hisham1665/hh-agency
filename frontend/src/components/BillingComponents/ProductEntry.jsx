@@ -18,16 +18,16 @@ import axios from "axios";
 
 const ProductEntry = ({ onAddProduct }) => {
     const [input, setInput] = useState({
-        name: "",
-        category: "",
-        price: "",
-        qty: 1,
+        Product_Name: "",
+        Product_Catagory: "",
+        Product_Price: "",
+        Product_QTY: 1,
     });
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [highlightIndex, setHighlightIndex] = useState(-1);
-    const suggestionsListRef = useRef(null); // Reference for the suggestions list
+    const suggestionsListRef = useRef(null);
 
     const inputRef = useRef();
 
@@ -42,6 +42,7 @@ const ProductEntry = ({ onAddProduct }) => {
             const res = await axios.get(
                 `http://localhost:5000/api/product/get-products?q=${query}`
             );
+            // Adjust this part based on your API response structure
             setSuggestions(res.data || []);
         } catch (err) {
             console.error("Failed to fetch products:", err);
@@ -52,15 +53,15 @@ const ProductEntry = ({ onAddProduct }) => {
 
     useEffect(() => {
         const delay = setTimeout(() => {
-            if (input.name) {
-                fetchProducts(input.name);
+            if (input.Product_Name) {
+                fetchProducts(input.Product_Name);  // Fetch based on product name input
                 setShowSuggestions(true);
             } else {
                 setSuggestions([]);
             }
         }, 300);
         return () => clearTimeout(delay);
-    }, [input.name]);
+    }, [input.Product_Name]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -70,10 +71,10 @@ const ProductEntry = ({ onAddProduct }) => {
 
     const handleSuggestionSelect = (product) => {
         setInput({
-            name: product.Product_name,
-            category: product.Product_Catogory,
-            price: product.Product_price,
-            qty: 1,
+            Product_Name: product.Product_name,  // Use Product_name from the response
+            Product_Catagory: product.Product_Catogory,  // Use Product_Catogory
+            Product_Price: product.Product_price,  // Use Product_price
+            Product_QTY: 1,
         });
         setSuggestions([]);
         setShowSuggestions(false);
@@ -102,7 +103,6 @@ const ProductEntry = ({ onAddProduct }) => {
         }
     };
 
-    // Scroll the list to the highlighted item
     useEffect(() => {
         if (highlightIndex !== -1 && suggestionsListRef.current) {
             const highlightedItem = suggestionsListRef.current.children[highlightIndex];
@@ -116,12 +116,12 @@ const ProductEntry = ({ onAddProduct }) => {
     }, [highlightIndex]);
 
     const handleAdd = () => {
-        if (!input.name || !input.price || !input.qty) return;
+        if (!input.Product_Name || !input.Product_Price || !input.Product_QTY) return;
         onAddProduct({
             ...input,
-            total: input.qty * input.price,
+            Product_Total: input.Product_QTY * input.Product_Price,  // Corrected the multiplication logic
         });
-        setInput({ name: "", category: "", price: "", qty: 1 });
+        setInput({ Product_Name: "", Product_Catagory: "", Product_Price: "", Product_QTY: 1 });
     };
 
     return (
@@ -132,9 +132,9 @@ const ProductEntry = ({ onAddProduct }) => {
                         <FormLabel>Product Name</FormLabel>
                         <InputGroup>
                             <Input
-                                name="name"
+                                name="Product_Name"
                                 placeholder="Enter product"
-                                value={input.name}
+                                value={input.Product_Name}
                                 onChange={handleInputChange}
                                 onFocus={() => setShowSuggestions(true)}
                                 onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
@@ -166,7 +166,7 @@ const ProductEntry = ({ onAddProduct }) => {
                                 <List spacing={0} ref={suggestionsListRef}>
                                     {suggestions.map((product, idx) => (
                                         <ListItem
-                                            key={idx}
+                                            key={product._id}
                                             px={4}
                                             py={2}
                                             bg={highlightIndex === idx ? itemHoverBg : bgColor}
@@ -175,7 +175,7 @@ const ProductEntry = ({ onAddProduct }) => {
                                             _hover={{ bg: itemHoverBg }}
                                             onClick={() => handleSuggestionSelect(product)}
                                         >
-                                            {product.Product_name}
+                                            {product.Product_name}  {/* Corrected property name */}
                                         </ListItem>
                                     ))}
                                 </List>
@@ -187,9 +187,9 @@ const ProductEntry = ({ onAddProduct }) => {
                     <FormControl>
                         <FormLabel>Category</FormLabel>
                         <Input
-                            name="category"
+                            name="Product_Catagory"
                             placeholder="Category"
-                            value={input.category}
+                            value={input.Product_Catagory}
                             onChange={handleInputChange}
                             readOnly
                         />
@@ -199,10 +199,10 @@ const ProductEntry = ({ onAddProduct }) => {
                     <FormControl isRequired>
                         <FormLabel>Price</FormLabel>
                         <Input
-                            name="price"
+                            name="Product_Price"
                             placeholder="Price"
                             type="number"
-                            value={input.price}
+                            value={input.Product_Price}
                             onChange={handleInputChange}
                             readOnly
                         />
@@ -212,10 +212,10 @@ const ProductEntry = ({ onAddProduct }) => {
                     <FormControl isRequired>
                         <FormLabel>Qty</FormLabel>
                         <Input
-                            name="qty"
+                            name="Product_QTY"
                             placeholder="Qty"
                             type="number"
-                            value={input.qty}
+                            value={input.Product_QTY}
                             min={1}
                             step={1}
                             onChange={handleInputChange}

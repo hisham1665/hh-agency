@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Flex, Text, Stack } from "@chakra-ui/react";
+import { useAuth } from "../../context/AuthContext";
 
-const HeaderInfo = ({ saleStaff = "John Doe" }) => {
+const HeaderInfo = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-
+  const {userName} = useAuth()
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
@@ -23,7 +24,7 @@ const HeaderInfo = ({ saleStaff = "John Doe" }) => {
       </Stack>
 
       <Text fontSize="sm" fontWeight="bold">
-        Sales Staff: {saleStaff}
+        Sales Staff: {userName}
       </Text>
     </Flex>
   );

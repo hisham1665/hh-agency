@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import {
   Table,
   Thead,
@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon, CheckIcon } from "@chakra-ui/icons";
 
-const ProductTable = ({ products, onDelete, onUpdate }) => {
+const ProductTable = ({ products, onDelete, onUpdate, onTotal }) => {
   const [editIndex, setEditIndex] = useState(null);
   const [editItem, setEditItem] = useState(null);
   const [applyDiscount, setApplyDiscount] = useState(false);
@@ -27,16 +27,19 @@ const ProductTable = ({ products, onDelete, onUpdate }) => {
 
   const handleSave = () => {
     if (editItem) {
-      editItem.total = editItem.qty * editItem.price;
+      editItem.Product_Total = editItem.Product_QTY * editItem.Product_Price;
       onUpdate(editItem, editIndex);
     }
     setEditIndex(null);
     setEditItem(null);
   };
 
-  const total = products.reduce((sum, p) => sum + p.total, 0);
-  const discountedTotal = applyDiscount ? total * 0.95 : total;
-
+  const total = products.reduce((sum, p) => sum + p.Product_Total, 0);
+  const GrandTotal = applyDiscount ? total * 0.95 : total;
+  const discountAmount = applyDiscount ? total * 0.05 : 0;
+  useEffect(() => {
+    onTotal(total , discountAmount , GrandTotal);
+  }, [total, discountAmount, GrandTotal]);
   return (
     <Box>
       <Box overflowX={{ base: "auto", md: "unset" }}>
@@ -59,46 +62,46 @@ const ProductTable = ({ products, onDelete, onUpdate }) => {
                 <Td>
                   {editIndex === index ? (
                     <Input
-                      value={editItem.name}
-                      onChange={(e) => setEditItem({ ...editItem, name: e.target.value })}
+                      value={editItem.Product_Name}
+                      onChange={(e) => setEditItem({ ...editItem, Product_Name: e.target.value })}
                     />
                   ) : (
-                    product.name
+                    product.Product_Name
                   )}
                 </Td>
                 <Td>
                   {editIndex === index ? (
                     <Input
-                      value={editItem.category}
-                      onChange={(e) => setEditItem({ ...editItem, category: e.target.value })}
+                      value={editItem.Product_Catagory}
+                      onChange={(e) => setEditItem({ ...editItem,  Product_Catagory: e.target.value })}
                     />
                   ) : (
-                    product.category
+                    product.Product_Catagory
                   )}
                 </Td>
                 <Td isNumeric>
                   {editIndex === index ? (
                     <Input
                       type="number"
-                      value={editItem.price}
-                      onChange={(e) => setEditItem({ ...editItem, price: parseFloat(e.target.value) })}
+                      value={editItem.Product_Price}
+                      onChange={(e) => setEditItem({ ...editItem, Product_Price: parseFloat(e.target.value) })}
                     />
                   ) : (
-                    product.price
+                    product.Product_Price
                   )}
                 </Td>
                 <Td isNumeric>
                   {editIndex === index ? (
                     <Input
                       type="number"
-                      value={editItem.qty}
-                      onChange={(e) => setEditItem({ ...editItem, qty: parseInt(e.target.value) })}
+                      value={editItem.Product_QTY}
+                      onChange={(e) => setEditItem({ ...editItem, Product_QTY: parseInt(e.target.value) })}
                     />
                   ) : (
-                    product.qty
+                    product.Product_QTY
                   )}
                 </Td>
-                <Td isNumeric>{product.total}</Td>
+                <Td isNumeric>{product.Product_Total}</Td>
                 <Td>
                   {editIndex === index ? (
                     <IconButton
@@ -145,15 +148,19 @@ const ProductTable = ({ products, onDelete, onUpdate }) => {
 
         <Flex justify="space-between">
           <Text fontWeight="bold">Total:</Text>
-          <Text className="text-4xl">₹ {total.toFixed(2)}</Text>
+          <Text className="text-xl">₹ {total.toFixed(2)}</Text>
         </Flex>
 
         {applyDiscount && (
           <Flex justify="space-between" color="green.500" fontWeight="bold">
             <Text>Discounted Total:</Text>
-            <Text className="text-xl">₹ {discountedTotal.toFixed(2)}</Text>
+            <Text className="text-xl">₹ {discountAmount.toFixed(2)}</Text>
           </Flex>
         )}
+        <Flex justify="space-between">
+          <Text fontWeight="bold"> Grand Total:</Text>
+          <Text className="text-4xl" >₹ {applyDiscount ? GrandTotal.toFixed(2) : total.toFixed(2)}</Text>
+        </Flex>
       </Box>
     </Box>
   );
