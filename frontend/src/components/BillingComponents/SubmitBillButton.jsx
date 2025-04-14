@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Box } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 const SubmitBillButton = ({ onSubmit }) => {
   return (

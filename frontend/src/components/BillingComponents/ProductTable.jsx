@@ -34,7 +34,7 @@ const ProductTable = ({ products, onDelete, onUpdate, onTotal }) => {
     setEditItem(null);
   };
 
-  const total = products.reduce((sum, p) => sum + p.Product_Total, 0);
+  const total = products.reduce((sum, p) => sum + p.Product_Total   , 0);
   const GrandTotal = applyDiscount ? total * 0.95 : total;
   const discountAmount = applyDiscount ? total * 0.05 : 0;
   useEffect(() => {

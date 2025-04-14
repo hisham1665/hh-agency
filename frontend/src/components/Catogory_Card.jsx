@@ -12,15 +12,16 @@ import {
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-
+import { motion } from "framer-motion";
+const MotionBox = motion.create(Box);
 const CategoryCarousel = ({ catagories }) => {
     const navigate = useNavigate();
     const cardBg = useColorModeValue('white', 'gray.800');
-    const borderColor = useColorModeValue('gray.200', 'gray.700');
+    const borderColor = useColorModeValue('gray.200', 'gray .900');
     const textColor = useColorModeValue('gray.900', 'white');
 
     // Responsive value: number of columns per row
-    const columns = useBreakpointValue({ base: 2, sm: 3, md: 4, lg: 5 });
+    const columns = useBreakpointValue({ base: 2, sm: 3, md: 4, lg: 6 });
 
     const itemsPerPage = columns * 2; // two rows
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,7 +40,7 @@ const CategoryCarousel = ({ catagories }) => {
         );
     };
 
-    // Auto-slide every 5 seconds
+
     useEffect(() => {
         const interval = setInterval(nextSlide, 5000);
         return () => clearInterval(interval);
@@ -67,55 +68,57 @@ const CategoryCarousel = ({ catagories }) => {
                 size="lg"
                 variant="ghost"
             />
+            <MotionBox initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
 
-            {/* Cards Grid */}
-            <SimpleGrid
-                columns={columns}
-                spacing={4}
-                width="100%"
-                mx="auto"
-                justifyItems="center"
-            >
-                {itemsToShow.map((catagory, idx) => (
-                    <Box
-                        key={idx}
-                        onClick={() => navigate(`/category/${catagory.Catagory_name}`)}
-                        borderWidth="1px"
-                        borderRadius="lg"
-                        overflow="hidden"
-                        bg={cardBg}
-                        borderColor={borderColor}
-                        shadow="sm"
-                        cursor="pointer"
-                        _hover={{ shadow: 'md', transform: 'scale(1.02)' }}
-                        transition="all 0.2s"
-                        width="100%"
-                        maxW="180px"
-                        mx="auto"
-                    >
-                        <Image
-                            src={catagory.Catagory_Image}
-                            alt={catagory.Catagory_name}
-                            objectFit="cover"
+                {/* Cards Grid */}
+                <SimpleGrid
+                    columns={columns}
+                    spacing={4}
+                    width="100%"
+                    mx="auto"
+                    justifyItems="center"
+                >
+                    {itemsToShow.map((catagory, idx) => (
+                        <Box
+                            key={idx}
+                            onClick={() => navigate(`/category/${catagory.Catagory_name}`)}
+                            borderWidth="1px"
+                            borderRadius="lg"
+                            overflow="hidden"
+                            bg={cardBg}
+                            borderColor={borderColor}
+                            shadow="sm"
+                            cursor="pointer"
+                            _hover={{ shadow: 'md', transform: 'scale(1.02)' }}
+                            transition="all 0.2s"
                             width="100%"
-                            height="140px"
-                            p={3}
-                            borderRadius="xl"
-                            border="1px solid"
-                            borderColor="gray.200"
-                            boxShadow="sm"
-                        />
-                        <Box p={4}>
-                            <Link _hover={{ textDecor: 'none' }}>
-                                <Heading fontSize="md" mb={1} color={textColor} textAlign="center">
-                                    {catagory.Catagory_name}
-                                </Heading>
-                            </Link>
+                            maxW="180px"
+                            mx="auto"
+                        >
+                            <Image
+                                src={catagory.Catagory_Image}
+                                alt={catagory.Catagory_name}
+                                objectFit="contain"
+                                width="100%"
+                                height="140px"
+                                p={3}
+                                borderRadius="xl"
+                                border="1px solid"
+                                borderColor="gray.700"
+                                boxShadow="sm"
+                            />
+                            <Box p={4}>
+                                <Link _hover={{ textDecor: 'none' }}>
+                                    <Heading fontSize="md" mb={1} color={textColor} textAlign="center">
+                                        {catagory.Catagory_name}
+                                    </Heading>
+                                </Link>
+                            </Box>
                         </Box>
-                    </Box>
-                ))}
-            </SimpleGrid>
+                    ))}
+                </SimpleGrid>
 
+            </MotionBox>
             {/* Right Arrow */}
             <IconButton
                 icon={<ChevronRightIcon />}

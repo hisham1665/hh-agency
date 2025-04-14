@@ -19,6 +19,7 @@ import {
   Input,
   Text,
   Button,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import CustomerForm from "../components/BillingComponents/CustomerForm";
 import ProductEntry from "../components/BillingComponents/ProductEntry";
@@ -28,7 +29,7 @@ import { motion } from "framer-motion";
 import HeaderInfo from "../components/BillingComponents/HeaderInfo";
 import axios from "axios";
 import { useAuth } from '../context/AuthContext';
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 const BillingPage = () => {
   const { userName } = useAuth()
@@ -107,6 +108,7 @@ const BillingPage = () => {
         status: "success",
         duration: 3000,
         isClosable: true,
+        position:'top-right',
       });
 
       // Reset all
@@ -124,12 +126,13 @@ const BillingPage = () => {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position:'top-right',
       });
     }
   };
-
+  const BGColor = useColorModeValue('white' , 'gray.800');
   return (
-    <Container maxW="container.lg" py={6}>
+    <Container   maxW="container.lg" py={6} border={'1px'} borderColor={BGColor} borderRadius={'3xl'} backgroundColor={BGColor} boxShadow={'2xl'} >
       <MotionBox initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
         <Heading mb={6} textAlign="center" fontSize={{ base: "2xl", md: "4xl" }}>
           HH Agency Billing Page

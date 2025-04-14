@@ -28,19 +28,15 @@ function NavBar({key}) {
         window.location.reload()
     };
     const isLoggedIn = !!user
-    // Colors based on theme mode
-    const bgColor = useColorModeValue('white', 'gray.800');
+    const bgColor = useColorModeValue('linear-gradient(to bottom, #FFFFFF, #F7FAFC)', 'gray.800');
     const textColor = useColorModeValue('gray.700', 'gray.200');
 
     return (
         <Box bg={bgColor} px={4} shadow="md" className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
             <Flex h={16} alignItems="center" justifyContent="space-between" maxW="7xl" mx="auto">
-                {/* Logo */}
                 <Link to="/" className="flex items-center">
                     <span className={`text-xl font-bold ${textColor}`}>Hisham Agencies</span>
                 </Link>
-
-                {/* Desktop Menu */}
                 <Flex alignItems="center" display={{ base: 'none', md: 'flex' }}>
                     <Stack direction="row" spacing={4} align="center">
                         <Link to="/" className={`hover:text-blue-600 text-md ${textColor}`}>Home</Link>
@@ -91,10 +87,10 @@ function NavBar({key}) {
                         <Link to="/" onClick={onClose} className={`hover:text-blue-600 text-md ${textColor}`}>Home</Link>
                         <Link to="/product" onClick={onClose} className={`hover:text-blue-600 text-md ${textColor}`}>Product</Link>
                         {isLoggedIn && user === "admin"  &&  (
-                            <Link to="/billing" className={`hover:text-blue-600 text-md ${textColor}`}>Billing</Link>
+                            <Link to="/billing" onClick={onClose} className={`hover:text-blue-600 text-md ${textColor}`}>Billing</Link>
                         )}
                         {isLoggedIn && user === "admin"  &&  (
-                            <Link to="/inventory" className={`hover:text-blue-600 text-md ${textColor}`}>Inventory</Link>
+                            <Link to="/inventory" onClick={onClose} className={`hover:text-blue-600 text-md ${textColor}`}>Inventory</Link>
                         )}
 
                         {!isLoggedIn ? (

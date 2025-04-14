@@ -14,12 +14,17 @@ import {
   Button,
   Flex,
   HStack,
+  useColorModeValue,
 } from '@chakra-ui/react';
+import { motion } from "framer-motion";
+import { FaWhatsapp } from 'react-icons/fa';
 
+const MotionBox = motion.create(Box);
 function Cards_product({ product = [], getCategoryImage }) {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 20;
-
+  const bgColorCard = useColorModeValue('white', 'gray.700');
+  const bgColor = useColorModeValue('gray.700', 'white');
   const totalPages = Math.ceil(product.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -39,7 +44,7 @@ function Cards_product({ product = [], getCategoryImage }) {
 
   if (!product || product.length === 0) {
     return (
-      <Text textAlign="center" fontSize="lg" color="gray.500">
+      <Text textAlign="center" fontSize="lg" color="gray.800">
         No products found.
       </Text>
     );
@@ -69,100 +74,118 @@ function Cards_product({ product = [], getCategoryImage }) {
   };
 
   return (
-    <Box p={5} width="100%">
-      <SimpleGrid
-        columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
-        spacing={6}
-        width="100%"
-        justifyItems="center"
-      >
-        {paginatedProducts.map((product) => (
-          <Card
-            key={product._id}
-            width={'100%'}
-            maxW="260px"
-            borderRadius="2xl"
-            boxShadow="lg"
-            bg="gray.700"
-            color="white"
-            overflow="hidden"
-          >
-            <VStack spacing={0} align="stretch">
-              <Image
-                marginTop={5}
-                src={getCategoryImage(product.Product_Catogory)}
-                alt={product.Product_Catogory}
-                height="200px"
-                width="100%"
-                objectFit="contain"
-                borderRadius="2xl"
-              />
+    <MotionBox initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
 
-              <CardHeader pb={1}>
-                <Heading size="md" noOfLines={2}>
-                  {product.Product_name}
-                </Heading>
-              </CardHeader>
-
-              <CardBody pt={1} pb={2}>
-                <Text fontSize="sm" color="gray.300">
-                  Category: <b>{product.Product_Catogory}</b>
-                </Text>
-                <Text fontSize="xl" fontWeight="bold" mt={2}>
-                  ₹{product.Product_price}
-                </Text>
-              </CardBody>
-
-              <CardFooter pt={0} pb={4} px={4}>
-                <Stack direction="row" spacing={3} width="100%">
-                  <Button colorScheme="blue" size="sm" flex={1}>
-                    Buy now
-                  </Button>
-                  <Button variant="outline" colorScheme="blue" size="sm" flex={1}>
-                    Add to cart
-                  </Button>
-                </Stack>
-              </CardFooter>
-            </VStack>
-          </Card>
-        ))}
-      </SimpleGrid>
-
-      {/* Numbered Pagination */}
-      {/* Numbered Pagination */}
-      <Flex justify="center" mt={8}>
-        <HStack spacing={2} wrap="wrap">
-          <Button
-            onClick={handlePrev}
-            isDisabled={currentPage === 1}
-            size="sm"
-            variant="ghost"
-          >
-            Previous
-          </Button>
-          {Array.from({ length: totalPages }, (_, i) => (
-            <Button
-              key={i + 1}
-              onClick={() => handlePageClick(i + 1)}
-              size="sm"
-              variant={currentPage === i + 1 ? 'solid' : 'ghost'}
-              colorScheme={currentPage === i + 1 ? 'blue' : 'gray'}
+      <Box p={5} width="100%">
+        <SimpleGrid
+          columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+          spacing={6}
+          width="100%"
+          justifyItems="center"
+        >
+          {paginatedProducts.map((product) => (
+            <Card
+              key={product._id}
+              width={'100%'}
+              maxW="260px"
+              borderRadius="2xl"
+              boxShadow="lg"
+              bg={bgColorCard}
+              color={bgColor}
+              overflow="hidden"
+              _hover={{
+                bg: useColorModeValue('gray.100', 'gray.600'), // Change background color on hover
+                boxShadow: 'xl', // Add a larger shadow on hover
+                transform: 'scale(1.05)', // Slightly scale up the card
+                transition: 'all 0.3s ease', // Smooth transition for hover effects
+              }}
             >
-              {i + 1}
-            </Button>
-          ))}
-          <Button
-            onClick={handleNext}
-            isDisabled={currentPage === totalPages}
-            size="sm"
-            variant="ghost"
-          >
-            Next
-          </Button>
-        </HStack>
-      </Flex>
+              <VStack spacing={0} align="stretch">
+                <Image
+                  marginTop={5}
+                  src={getCategoryImage(product.Product_Catogory)}
+                  alt={product.Product_Catogory}
+                  height="200px"
+                  width="100%"
+                  objectFit="contain"
+                  borderRadius="2xl"
+                />
+                <CardHeader pb={0}>
+                  <Heading size="md" noOfLines={2} minHeight="48px">
+                    {product.Product_name}
+                  </Heading>
+                </CardHeader>
 
-    </Box>
+                <CardBody pt={1} pb={1}>
+                  <Text fontSize="sm" color={bgColor} >
+                    Category: <b>{product.Product_Catogory}</b>
+                  </Text>
+
+                </CardBody>
+                <Box flex="1" minH="20px" />
+                <CardFooter pt={5} pb={2} px={4}>
+                  <Flex justify="space-between" align="center" width="100%">
+                    <Text fontSize="2xl" fontWeight="bold">
+                      ₹{product.Product_price}
+                    </Text>
+                    <Button
+                      colorScheme="green"
+                      size="xl"
+                      onClick={(e) => {
+                        e.stopPropagation(); 
+                        const phoneNumber = '919349818253'; 
+                        const message = encodeURIComponent(
+                          `Hello! I'm interested in ${product.Product_name} from category ${product.Product_Catogory}. Please share more details.`
+                        );
+                        window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                      }}
+                    >
+                      <FaWhatsapp size={35} />
+                    </Button>
+                  </Flex>
+                </CardFooter>
+
+              </VStack>
+            </Card>
+          ))}
+        </SimpleGrid>
+
+        {/* Numbered Pagination */}
+        {/* Numbered Pagination */}
+        <Flex justify="center" mt={8}>
+          <HStack spacing={2} wrap="wrap">
+            <Button
+              onClick={handlePrev}
+              isDisabled={currentPage === 1}
+              size="sm"
+              variant="ghost"
+            >
+              Previous
+            </Button>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <Button
+                key={i + 1}
+                onClick={() => handlePageClick(i + 1)}
+                size="sm"
+                variant={currentPage === i + 1 ? 'solid' : 'ghost'}
+                colorScheme={currentPage === i + 1 ? 'blue' : 'gray'}
+              >
+                {i + 1}
+              </Button>
+            ))}
+            <Button
+              onClick={handleNext}
+              isDisabled={currentPage === totalPages}
+              size="sm"
+              variant="ghost"
+            >
+              Next
+            </Button>
+          </HStack>
+        </Flex>
+
+      </Box>
+    </MotionBox>
   );
 }
 
