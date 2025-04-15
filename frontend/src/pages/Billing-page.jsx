@@ -135,7 +135,7 @@ const BillingPage = () => {
     <Container   maxW="container.lg" py={6} border={'1px'} borderColor={BGColor} borderRadius={'3xl'} backgroundColor={BGColor} boxShadow={'2xl'} >
       <MotionBox initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
         <Heading mb={6} textAlign="center" fontSize={{ base: "2xl", md: "4xl" }}>
-          HH Agency Billing Page
+          Hisham Agency Billing Page
         </Heading>
         <VStack spacing={6} align="stretch">
           <HeaderInfo />

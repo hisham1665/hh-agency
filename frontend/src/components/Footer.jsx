@@ -23,12 +23,12 @@ function Footer() {
           {/* Left: Contact Info */}
           <Box>
             <Heading size="md" mb={4}>
-              HH Agency
+              Hisham Agencies
             </Heading>
             <Text>Address: Ala Gothuruth, Kothaparambu, Kodungallur</Text>
             <Text>PIN CODE : 680668</Text>
             <Text>Phone: <Link href="tel:9349818253">9349818253</Link></Text>
-            <Text>Email: <Link href="mailto:hishamkhofficial@gmail.com">info@HHAgency.com</Link></Text>
+            <Text>Email: <Link href="mailto:hishamkhofficial@gmail.com">info@HishamAgency.com</Link></Text>
           </Box>
 
           {/* Right: Google Maps */}
@@ -47,7 +47,7 @@ function Footer() {
         </SimpleGrid>
 
         <Box textAlign="center" pt={10}>
-          <Text fontSize="sm">© {new Date().getFullYear()} HH Agency. All rights reserved.</Text>
+          <Text fontSize="sm">© {new Date().getFullYear()} Hisham Agencies. All rights reserved.</Text>
         </Box>
       </Container>
     </Box>

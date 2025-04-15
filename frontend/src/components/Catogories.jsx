@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Catogory_Card from './Catogory_Card'
 import axios from 'axios';
-import { Spinner, Text } from '@chakra-ui/react';
+import { Flex, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
 function Catogories() {
   const [categories , setCategories] = useState([]);
   const [loading , setLoading] = useState(true);
@@ -24,7 +24,10 @@ function Catogories() {
   }
   return (
     <div className='flex flex-row overflow'>
+      <Stack direction={'column'} spacing={4} width={'full'} paddingTop={'5'} >
+      <Heading mb={4} textAlign="center" > Product Categories  </Heading>
         <Catogory_Card catagories = {categories} /> 
+      </Stack>
     </div>
   )
 }
