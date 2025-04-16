@@ -40,7 +40,7 @@ const UpdatePaymentModal = ({ isOpen, onClose, bill, onPaymentUpdated }) => {
         };
 
         try {
-            const response = await axios.put(`http://localhost:5000/api/bills/updateBalance/${bill.Bill_ID}`, updatedFields);
+            const response = await axios.put(`/api/bills/updateBalance/${bill.Bill_ID}`, updatedFields);
             toast({ title: 'Payment updated.', status: 'success' });
             onPaymentUpdated(response.data); // assuming your API returns the updated bill
             onClose();
