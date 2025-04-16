@@ -9,9 +9,9 @@ const BillsList = ({ view, searchTerm, searchFilter, triggerSearch }) => {
   const [loading, setLoading] = useState(true);
 
   const getAPIEndpoint = () => {
-    if (view === 'paid') return 'http://localhost:5000/api/bills/paidBills';
-    if (view === 'unpaid') return 'http://localhost:5000/api/bills/unpaidBills';
-    return 'http://localhost:5000/api/bills/allBills';
+    if (view === 'paid') return '/api/bills/paidBills';
+    if (view === 'unpaid') return '/api/bills/unpaidBills';
+    return '/api/bills/allBills';
   };
 
   const matchesSearch = (bill) => {
