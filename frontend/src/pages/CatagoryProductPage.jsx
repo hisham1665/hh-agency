@@ -17,8 +17,8 @@ const CategoryProductsPage = () => {
     const [catagories, setCategories] = useState([]);
     const fetchProducts = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/product/get-by-category/${categoryName}`);
-            const url = `http://localhost:5000/api/catagory/get-catagory?q=${categoryName}`
+            const res = await axios.get(`/api/product/get-by-category/${categoryName}`);
+            const url = `/api/catagory/get-catagory?q=${categoryName}`
             const catagoryRes = await axios.get(url)
             setProducts(res.data);
             setCategories(catagoryRes.data);
