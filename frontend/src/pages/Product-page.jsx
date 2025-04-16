@@ -14,12 +14,12 @@ function Product() {
     const fetchProductsAndCategories = async () => {
       try {
         const productURL = searchQuery
-          ? `http://localhost:5000/api/product/get-products?q=${searchQuery}`
-          : 'http://localhost:5000/api/product/get-products';
+          ? `/api/product/get-products?q=${searchQuery}`
+          : '/api/product/get-products';
 
         const [productRes, categoryRes] = await Promise.all([
           axios.get(productURL),
-          axios.get('http://localhost:5000/api/catagory/get-catagory'),
+          axios.get('/api/catagory/get-catagory'),
         ]);
 
         setProducts(productRes.data);
