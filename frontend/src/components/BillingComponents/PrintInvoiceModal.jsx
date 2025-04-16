@@ -25,7 +25,7 @@ const PrintInvoiceModal = ({ isOpen, onClose, latestBillId }) => {
     if (isOpen && latestBillId) {
       setLoading(true);
       axios
-        .get(`http://localhost:5000/api/bills/search-bill?q=${latestBillId}`)
+        .get(`/api/bills/search-bill?q=${latestBillId}`)
         .then((res) => {
         console.log(res);
           setBillData(res.data);
