@@ -8,7 +8,7 @@ function Catogories() {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/catagory/get-catagory");
+      const res = await axios.get("/api/catagory/get-catagory");
       setCategories(res.data || []);
     } catch (err) {
       console.error('Failed to fetch categories:', err);
