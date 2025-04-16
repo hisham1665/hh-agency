@@ -41,7 +41,7 @@ const ProductEntry = ({ onAddProduct }) => {
         setLoading(true);
         try {
             const res = await axios.get(
-                `http://localhost:5000/api/product/get-products?q=${query}`
+                `/api/product/get-products?q=${query}`
             );
             // Adjust this part based on your API response structure
             setSuggestions(res.data || []);
