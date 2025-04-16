@@ -29,8 +29,8 @@ function InventoryPage() {
   const fetchProducts = async () => {
     try {
       const url = searchQuery
-        ? `http://localhost:5000/api/product/get-products?q=${searchQuery}`
-        : 'http://localhost:5000/api/product/get-products';
+        ? `/api/product/get-products?q=${searchQuery}`
+        : '/api/product/get-products';
       const res = await axios.get(url);
       setProducts(res.data);
     } catch (err) {
