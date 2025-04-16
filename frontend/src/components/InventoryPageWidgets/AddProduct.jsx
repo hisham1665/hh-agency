@@ -47,7 +47,7 @@ const AddProductForm = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/product/createProduct', formData);
+      const response = await axios.post('/api/product/createProduct', formData);
 
       toast({
         title: 'Product added.',
