@@ -38,7 +38,7 @@ const SignUpPage = () => {
         role,
       };
       try {
-        const response = await axios.post("http://localhost:5000/api/user/createuser", signupData);
+        const response = await axios.post("/api/user/createuser", signupData);
         console.log("Signup successful!", response.data);
         setName("");
         setEmail("");
