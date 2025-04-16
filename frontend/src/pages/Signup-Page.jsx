@@ -26,7 +26,7 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-    const role = "admin"
+    const role = "user"
     const navigate = useNavigate();
   // 👇 Handle form submission
   const handleSubmit = async(e) => {
