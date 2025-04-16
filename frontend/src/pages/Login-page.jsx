@@ -38,7 +38,7 @@ const LoginPage = () => {
       password,
     };
     try {
-      const res = await axios.post('http://localhost:5000/api/user/login', loginData);
+      const res = await axios.post('/api/user/login', loginData);
 
       // Save token in localStorage (optional)
         loginUser(res.data.token);
