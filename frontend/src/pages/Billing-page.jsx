@@ -104,7 +104,7 @@ const BillingPage = () => {
         Bill_Date: new Date(),
         Bill_Time: new Date().toLocaleTimeString("en-IN", { hour12: false }),
       };
-      const res = await axios.post("http://localhost:5000/api/bills/create-bill", payload);
+      const res = await axios.post("/api/bills/create-bill", payload);
       setLatestBillId(res.data.bill_id);
       setPrintModalOpen(true);
 
