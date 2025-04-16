@@ -34,7 +34,7 @@ const PopupForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/catagory/createCatagory', formData);
+            await axios.post('/api/catagory/createCatagory', formData);
             setFormData({ Catagory_name: '', Catagory_Image: '' });
             onClose(); // close modal after successful submit
         } catch (error) {
