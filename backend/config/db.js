@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 
 dotenv.config()
-console.log(process.env.MONgO_URI)
 export const Connectdb = async () => {
     try {
         const conn = await mongoose.connect(process.env.MONgO_URI);
@@ -11,5 +10,4 @@ export const Connectdb = async () => {
         console.log(`error : ${error.message}`)
         process.exit(1);
     }
-   
 }
