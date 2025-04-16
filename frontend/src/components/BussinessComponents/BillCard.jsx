@@ -51,7 +51,7 @@ const BillCard = ({ bill }) => {
           <Text>Customer: {bill.Customer_name}</Text>
           <Text>Grand Total: ₹{bill.Grand_total.toFixed(2)}</Text>
             <Badge fontSize={'sm'} colorScheme={bill.isPaid ? 'green' : 'red'} w="fit-content">
-              {bill.isPaid ? 'Paid' : `Balance : ₹${bill.Balance_Amount.toFixed(2)}`}
+              {bill.isPaid ? 'Paid' : `Balance : ₹${bill.Balance_Amount?.toFixed(2)}`}
             </Badge>
           <Flex justify={'space-between'}>
             <Button onClick={() => handleOpenModal(bill)} colorScheme="blue" size="sm" w={{ base: 'full', md: 'fit-content' }}>
