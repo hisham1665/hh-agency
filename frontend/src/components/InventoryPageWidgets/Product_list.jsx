@@ -50,7 +50,7 @@ function Product_list({ products, refreshProducts }) {
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/product/delete-product/${selectedProductId}`);
+      await axios.delete(`/api/product/delete-product/${selectedProductId}`);
       toast({
         title: 'Product deleted.',
         status: 'success',
@@ -91,7 +91,7 @@ function Product_list({ products, refreshProducts }) {
 
   const handleEditSave = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/product/update-product/${selectedProduct._id}`, editForm);
+      await axios.put(`/api/product/update-product/${selectedProduct._id}`, editForm);
       toast({
         title: 'Product updated successfully',
         status: 'success',
