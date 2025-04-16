@@ -35,6 +35,7 @@ const ProductEntry = ({ onAddProduct }) => {
     const itemHoverBg = useColorModeValue("gray.100", "blue.600");
     const itemTextColor = useColorModeValue("black", "white");
     const borderColor = useColorModeValue("gray.300", "gray.600");
+    const [isFromSuggestion, setIsFromSuggestion] = useState(false);
 
     const fetchProducts = async (query = "") => {
         setLoading(true);
@@ -67,7 +68,12 @@ const ProductEntry = ({ onAddProduct }) => {
         const { name, value } = e.target;
         setInput((prev) => ({ ...prev, [name]: value }));
         setHighlightIndex(-1);
+
+        if (name === "Product_Name") {
+            setIsFromSuggestion(false); // <-- reset if editing product name
+        }
     };
+
 
     const handleSuggestionSelect = (product) => {
         setInput({
@@ -76,6 +82,7 @@ const ProductEntry = ({ onAddProduct }) => {
             Product_Price: product.Product_price,  // Use Product_price
             Product_QTY: 1,
         });
+        setIsFromSuggestion(true);
         setSuggestions([]);
         setShowSuggestions(false);
         setHighlightIndex(-1);
@@ -122,6 +129,7 @@ const ProductEntry = ({ onAddProduct }) => {
             Product_Total: input.Product_QTY * input.Product_Price,  // Corrected the multiplication logic
         });
         setInput({ Product_Name: "", Product_Catagory: "", Product_Price: "", Product_QTY: 1 });
+        setIsFromSuggestion(false);
     };
 
     return (
@@ -191,7 +199,7 @@ const ProductEntry = ({ onAddProduct }) => {
                             placeholder="Category"
                             value={input.Product_Catagory}
                             onChange={handleInputChange}
-                            readOnly
+                            readOnly={isFromSuggestion}
                         />
                     </FormControl>
                 </Box>
@@ -204,7 +212,7 @@ const ProductEntry = ({ onAddProduct }) => {
                             type="number"
                             value={input.Product_Price}
                             onChange={handleInputChange}
-                            readOnly
+                            readOnly={isFromSuggestion}
                         />
                     </FormControl>
                 </Box>

@@ -29,6 +29,8 @@ import { motion } from "framer-motion";
 import HeaderInfo from "../components/BillingComponents/HeaderInfo";
 import axios from "axios";
 import { useAuth } from '../context/AuthContext';
+import PrintInvoiceModal from '../components/BillingComponents/PrintInvoiceModal';
+
 const MotionBox = motion.create(Box);
 
 const BillingPage = () => {
@@ -42,6 +44,8 @@ const BillingPage = () => {
   const [amountGiven, setAmountGiven] = useState("");
   const [changeOrDebt, setChangeOrDebt] = useState(null);
   const [isPaid, setIsPaid] = useState(false);
+  const [printModalOpen, setPrintModalOpen] = useState(false);
+  const [latestBillId, setLatestBillId] = useState(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -100,15 +104,16 @@ const BillingPage = () => {
         Bill_Date: new Date(),
         Bill_Time: new Date().toLocaleTimeString("en-IN", { hour12: false }),
       };
-      console.log(payload);  // Add this just before the request in handleFinalSubmit
-      await axios.post("http://localhost:5000/api/bills/create-bill", payload);
+      const res = await axios.post("http://localhost:5000/api/bills/create-bill", payload);
+      setLatestBillId(res.data.bill_id);
+      setPrintModalOpen(true);
 
       toast({
         title: "Bill submitted successfully!",
         status: "success",
         duration: 3000,
         isClosable: true,
-        position:'top-right',
+        position: 'top-right',
       });
 
       // Reset all
@@ -126,13 +131,13 @@ const BillingPage = () => {
         status: "error",
         duration: 3000,
         isClosable: true,
-        position:'top-right',
+        position: 'top-right',
       });
     }
   };
-  const BGColor = useColorModeValue('white' , 'gray.800');
+  const BGColor = useColorModeValue('white', 'gray.800');
   return (
-    <Container   maxW="container.lg" py={6} border={'1px'} borderColor={BGColor} borderRadius={'3xl'} backgroundColor={BGColor} boxShadow={'2xl'} >
+    <Container maxW="container.lg" py={6} border={'1px'} borderColor={BGColor} borderRadius={'3xl'} backgroundColor={BGColor} boxShadow={'2xl'} >
       <MotionBox initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
         <Heading mb={6} textAlign="center" fontSize={{ base: "2xl", md: "4xl" }}>
           Hisham Agency Billing Page
@@ -188,24 +193,31 @@ const BillingPage = () => {
           </ModalBody>
 
           <ModalFooter>
-            {!changeOrDebt ? (
+            {paymentMethod === "UPI" ? (
+              <>
+                <Button colorScheme="blue" mr={3} onClick={handleFinalSubmit}>
+                  Submit
+                </Button>
+                <Button variant="ghost" onClick={onClose}>
+                  Cancel
+                </Button>
+              </>
+            ) : !changeOrDebt ? (
               <>
                 <Button
                   colorScheme="green"
                   mr={3}
                   onClick={() => {
                     const given = parseFloat(amountGiven);
-                    const paidAmt = paymentMethod === "Cash" ? Math.min(given, grandTotal) : grandTotal;
-                    const isFullyPaid = paymentMethod === "Cash" ? given >= grandTotal : true;
+                    const paidAmt = Math.min(given, grandTotal);
+                    const isFullyPaid = given >= grandTotal;
                     const balance = isFullyPaid ? 0 : grandTotal - paidAmt;
 
                     setIsPaid(isFullyPaid);
                     setChangeOrDebt(
-                      paymentMethod === "Cash"
-                        ? isFullyPaid
-                          ? `Change to return: ₹${(given - grandTotal).toFixed(2)}`
-                          : `Balance due: ₹${(grandTotal - given).toFixed(2)}`
-                        : null
+                      isFullyPaid
+                        ? `Change to return: ₹${(given - grandTotal).toFixed(2)}`
+                        : `Balance due: ₹${(grandTotal - given).toFixed(2)}`
                     );
                   }}
                 >
@@ -225,9 +237,15 @@ const BillingPage = () => {
                 </Button>
               </>
             )}
+
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <PrintInvoiceModal
+        isOpen={printModalOpen}
+        onClose={() => setPrintModalOpen(false)}
+        latestBillId={latestBillId}
+      />
 
     </Container>
   );

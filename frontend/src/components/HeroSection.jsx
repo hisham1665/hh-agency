@@ -11,19 +11,20 @@ import {
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import { useInView } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 // Framer Motion Components
 const MotionBox = motion.create(Box);
 const MotionImage = motion.create(Image);
 const MotionFlex = motion.create(Flex);
-
 // Carousel images
-const images = ["/images/slide1.jpeg", "/images/slide2.jpeg", "/images/slide3.jpeg"];
+export const images = ["/images/slide1-min.jpg", "/images/slide2-min.jpg", "/images/slide3-min.jpg" ,"/images/slide4-min.jpg" , ];
 
 const HeroSection = () => {
+    const navigate = useNavigate();
     const [currentIndex, setCurrentIndex] = useState(0);
     const ref = useRef(null);
-    const isInView = useInView(ref );
+    const isInView = useInView(ref ,{ once: true });
 
     // Auto slide
     useEffect(() => {
@@ -85,6 +86,7 @@ const HeroSection = () => {
                         colorScheme="teal"
                         px={8}
                         fontSize={{ base: "sm", md: "md" }}
+                        onClick={() => {navigate('/product')}}
                     >
                         Get Started
                     </Button>

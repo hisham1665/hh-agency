@@ -11,7 +11,6 @@ import {
     useColorModeValue
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, SunIcon, MoonIcon } from '@chakra-ui/icons';
-import {jwtDecode} from "jwt-decode";
 import { useAuth } from '../context/AuthContext';
 
 
@@ -45,6 +44,9 @@ function NavBar({key}) {
                         )}
                         {isLoggedIn && user === "admin"  &&  (
                             <Link to="/inventory" className={`hover:text-blue-600 text-md ${textColor}`}>Inventory</Link>
+                        )}
+                        {isLoggedIn && user === "admin"  &&  (
+                            <Link to="/bussiness" className={`hover:text-blue-600 text-md ${textColor}`}>Bussiness</Link>
                         )}
                         <Link to="/product" className={`hover:text-blue-600 text-md ${textColor}`}>Product</Link>
 
@@ -91,6 +93,9 @@ function NavBar({key}) {
                         )}
                         {isLoggedIn && user === "admin"  &&  (
                             <Link to="/inventory" onClick={onClose} className={`hover:text-blue-600 text-md ${textColor}`}>Inventory</Link>
+                        )}
+                        {isLoggedIn && user === "admin"  &&  (
+                            <Link to="/bussiness" onClick={onClose} className={`hover:text-blue-600 text-md ${textColor}`}>Bussiness</Link>
                         )}
 
                         {!isLoggedIn ? (

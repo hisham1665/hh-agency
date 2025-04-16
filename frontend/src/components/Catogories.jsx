@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Catogory_Card from './Catogory_Card'
 import axios from 'axios';
-import { Flex, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Center, Flex, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
 function Catogories() {
   const [categories , setCategories] = useState([]);
   const [loading , setLoading] = useState(true);
@@ -20,7 +20,7 @@ function Catogories() {
     fetchCategories();
   },[])
   if(loading) {
-    return <Text><Spinner size={'md'}/>Loading ...........</Text>
+    return <Center><Text><Spinner size={'md'}/>Loading ...........</Text></Center>
   }
   return (
     <div className='flex flex-row overflow'>
